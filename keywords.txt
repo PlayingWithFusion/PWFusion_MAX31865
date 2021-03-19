@@ -5,16 +5,41 @@
 ####################################################
 #   Classes (KEYWORD1)
 ####################################################
-PWFusion_MAX31865_RTD					KEYWORD1
+MAX31865									KEYWORD1
+PWFusion_MAX31865							KEYWORD1
 
 
 ####################################################
 #   Functions (KEYWORD2)
 ####################################################
-MAX31865_config							KEYWORD2
-MAX31865_full_read						KEYWORD2
+begin										KEYWORD2
+sample										KEYWORD2
+getResistance								KEYWORD2
+getTemperature								KEYWORD2
+getStatus									KEYWORD2
+setLowFaultTemperature						KEYWORD2
+setHighFaultTemperature						KEYWORD2
+writeByte									KEYWORD2
+writeWord									KEYWORD2
+readByte									KEYWORD2
+readWrite									KEYWORD2
+writeConfig									KEYWORD2
 
 
 ####################################################
 #   Constants (LITERAL1)
 ####################################################
+RTD_2_WIRE									LITERAL1
+RTD_3_WIRE									LITERAL1
+RTD_4_WIRE									LITERAL1
+
+RTD_TYPE_PT100								LITERAL1
+RTD_TYPE_PT500								LITERAL1
+RTD_TYPE_PT1000								LITERAL1
+
+RTD_FAULT_TEMP_HIGH							LITERAL1
+RTD_FAULT_TEMP_LOW							LITERAL1
+RTD_FAULT_REFIN_HIGH						LITERAL1
+RTD_FAULT_REFIN_LOW_OPEN					LITERAL1
+RTD_FAULT_RTDIN_LOW_OPEN					LITERAL1
+RTD_FAULT_VOLTAGE_OOR						LITERAL1
