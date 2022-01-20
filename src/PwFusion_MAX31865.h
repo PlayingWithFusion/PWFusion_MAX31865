@@ -44,9 +44,9 @@
 #ifndef PWFUSION_MAX31865_h
 #define PWFUSION_MAX31865_h
 
-#include <Arduino.h>`
-#include <stdlib.h>`
-#include <SPI.h>`
+#include <Arduino.h>
+#include <stdlib.h>
+#include <SPI.h>
 
 #define RTD_2_WIRE        2
 #define RTD_3_WIRE        3
