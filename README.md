@@ -1,4 +1,6 @@
 # PWFusion_MAX31865
+[![Compile Examples](https://github.com/PlayingWithFusion/PWFusion_MAX31865/workflows/Compile%20Examples/badge.svg)](https://github.com/PlayingWithFusion/PWFusion_MAX31865/actions?workflow=Compile+Examples)
+
 ![SEN-30202 ISO](http://www.playingwithfusion.com/include/getimg.php?imgid=1153)
 ![SEN-30201 ISO](http://www.playingwithfusion.com/include/getimg.php?imgid=1117)
 
