@@ -30,10 +30,11 @@
 * DEALINGS IN THE SOFTWARE.
 * **************************************************************************
 * REVISION HISTORY:
-* Author		Date		Comments
-* J. Steinlage		2014Jan09	Original version
+* Author          Date      Comments
+* J. Steinlage    2014Jan09	Original version
 * J. Leonard      2021Mar16 Updated API to "feel" consistent with other PwFusion
 *                           libraries.  Now features true object-oriented API.
+* J. Leonard      2024Nov01 Moved to SPI transactions to support UNO R4
 *
 * Playing With Fusion, Inc. invests time and resources developing open-source
 * code. Please support Playing With Fusion and continued open-source
@@ -76,6 +77,7 @@ typedef enum Max31865_Reg_e {
 class MAX31865
 {
   public:
+    MAX31865();
     void begin(int8_t cs, uint8_t numWires = RTD_3_WIRE, uint16_t sensorType = RTD_TYPE_PT100, SPIClass &spiPort = SPI);
     void sample();
     float getResistance();
@@ -94,6 +96,8 @@ class MAX31865
 
     uint8_t _cs;
     SPIClass *_spiPort;
+    SPISettings _spiSettings;
+    SPISettings _spiSettingsJunk;
     uint8_t  _numWires;       // RTD type. 1 = PT100; 2 = PT1000
     uint16_t  _sensorType;    // # of wires. 2/4-wire: 0x00, 3-wire: 0x10
 

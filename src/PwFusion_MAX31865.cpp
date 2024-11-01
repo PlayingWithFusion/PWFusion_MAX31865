@@ -30,11 +30,12 @@
 * DEALINGS IN THE SOFTWARE.
 * **************************************************************************
 * REVISION HISTORY:
-* Author		    Date		    Comments
-* J. Steinlage  2014Jan09	  Original version
+* Author        Date        Comments
+* J. Steinlage  2014Jan09   Original version
 * J. Steinlage  2014Aug07   Change type of rtd_res to uint16_t to address sign issue
 * J. Leonard    2021Mar16   Updated API to "feel" consistent with other PwFusion
 *                           libraries.  Now features true object-oriented API.
+* J. Leonard      2024Nov01 Moved to SPI transactions to support UNO R4
 *
 * Playing With Fusion, Inc. invests time and resources developing open-source
 * code. Please support Playing With Fusion and continued open-source
@@ -49,8 +50,14 @@
 *       (both standard types, PT100 and PT1000)
 *   - Unpack register read into relevant variables
 ***************************************************************************/
-
 #include "PwFusion_MAX31865.h"
+
+
+MAX31865::MAX31865() :
+  _spiSettings(1000000, MSBFIRST, SPI_MODE3),
+  _spiSettingsJunk(200000, MSBFIRST, SPI_MODE3)
+{
+}
 
 
 void MAX31865::begin(int8_t cs, uint8_t numWires, uint16_t sensorType, SPIClass &spiPort)
@@ -63,6 +70,15 @@ void MAX31865::begin(int8_t cs, uint8_t numWires, uint16_t sensorType, SPIClass 
   _numWires = numWires;
   _sensorType = sensorType;
   _spiPort = &spiPort;
+
+  // Initialize SPI peripheral
+  _spiPort->begin();
+
+  // Workaround for Uno R4.  Set SPI configuration to 'something' different so
+  // that the next time beginTransaction(_spiSettings) is called the R4's
+  // SPI driver is forced to change SPI settings
+  _spiPort->beginTransaction(_spiSettingsJunk);
+  _spiPort->endTransaction(); 
 
   writeConfig();
 }
@@ -142,8 +158,7 @@ void MAX31865::setLowFaultTemperature(float value)
 
 void MAX31865::writeByte(Max31865_Reg reg, uint8_t value)
 {
-  _spiPort->setClockDivider(SPI_CLOCK_DIV16);   // SPI speed to SPI_CLOCK_DIV16 (1MHz)
-  _spiPort->setDataMode(SPI_MODE3);             // MAX31865 works in MODE1 or MODE3
+  _spiPort->beginTransaction(_spiSettings);
 
   // take the chip select low to select the device:
   digitalWrite(_cs, LOW);
@@ -152,13 +167,14 @@ void MAX31865::writeByte(Max31865_Reg reg, uint8_t value)
   _spiPort->transfer(value);
 
   // take the chip select high to de-select, finish config write
-  digitalWrite(_cs, HIGH);  
+  digitalWrite(_cs, HIGH);
+
+  _spiPort->endTransaction();
 }
 
 void MAX31865::writeWord(Max31865_Reg reg, uint16_t value)
 {
-  _spiPort->setClockDivider(SPI_CLOCK_DIV16);   // SPI speed to SPI_CLOCK_DIV16 (1MHz)
-  _spiPort->setDataMode(SPI_MODE3);             // MAX31865 works in MODE1 or MODE3
+  _spiPort->beginTransaction(_spiSettings);
 
   // take the chip select low to select the device:
   digitalWrite(_cs, LOW);
@@ -168,15 +184,16 @@ void MAX31865::writeWord(Max31865_Reg reg, uint16_t value)
   _spiPort->transfer(value & 0xFF);
 
   // take the chip select high to de-select, finish config write
-  digitalWrite(_cs, HIGH);  
+  digitalWrite(_cs, HIGH);
+
+  _spiPort->endTransaction(); 
 }
 
 uint8_t MAX31865::readByte(Max31865_Reg reg)
 {
   uint8_t result;
 
-  _spiPort->setClockDivider(SPI_CLOCK_DIV16);   // SPI speed to SPI_CLOCK_DIV16 (1MHz)
-  _spiPort->setDataMode(SPI_MODE3);             // MAX31865 works in MODE1 or MODE3
+  _spiPort->beginTransaction(_spiSettings);
 
   // take the chip select low to select the device:
   digitalWrite(_cs, LOW);
@@ -187,6 +204,8 @@ uint8_t MAX31865::readByte(Max31865_Reg reg)
   // take the chip select high to de-select, finish config write
   digitalWrite(_cs, HIGH);  
 
+  _spiPort->endTransaction(); 
+
   return result;
 }
 
@@ -195,8 +214,7 @@ uint16_t MAX31865::readWord(Max31865_Reg reg)
 {
   uint16_t result;
 
-  _spiPort->setClockDivider(SPI_CLOCK_DIV16);   // SPI speed to SPI_CLOCK_DIV16 (1MHz)
-  _spiPort->setDataMode(SPI_MODE3);             // MAX31865 works in MODE1 or MODE3
+  _spiPort->beginTransaction(_spiSettings);
 
   // take the chip select low to select the device:
   digitalWrite(_cs, LOW);
@@ -207,6 +225,8 @@ uint16_t MAX31865::readWord(Max31865_Reg reg)
 
   // take the chip select high to de-select, finish config write
   digitalWrite(_cs, HIGH);  
+
+  _spiPort->endTransaction(); 
 
   return result;
 }
