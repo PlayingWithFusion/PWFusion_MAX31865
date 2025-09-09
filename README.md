@@ -1,11 +1,10 @@
 <p align="center">
-  <img src="https://github.com/PlayingWithFusion/Arduino_SAMD/assets/77081880/05cc5ad2-8b62-4e97-ac00-dcc4c4118d5d" />
+    <img src="https://www.playingwithfusion.com/images/logo.svg" width="50%" />
 </p>
-
 <h1 align="center">Playing With Fusion MAX31865 Arduino Library</h1>
 
-![SEN-30202 ISO](http://www.playingwithfusion.com/include/getimg.php?imgid=1153)
-![SEN-30201 ISO](http://www.playingwithfusion.com/include/getimg.php?imgid=1117)
+![SEN-30202 ISO](https://www.playingwithfusion.com/include/getimg.php?imgid=1153)
+![SEN-30201 ISO](https://www.playingwithfusion.com/include/getimg.php?imgid=1117)
 
 Arduino library designed to interface Arduino-compatible hardware with the Maximum MAX31865 RTD to digital converter IC over SPI, used for digitizing RTD measurements. Examples provided to interface with SEN-30201, FDQ-30002, and SEN-30202.
 
